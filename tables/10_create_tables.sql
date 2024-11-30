@@ -34,7 +34,12 @@ CREATE TABLE Kho (
 	CONSTRAINT fk_quanlykho FOREIGN KEY (QuanLykhoID) REFERENCES NhanVien(NhanVienID)
 );
 
--- Tạo bảng cha HangHoa
+CREATE TABLE LoaiHangHoaCounter (
+    LoaiHangHoa VARCHAR(50) PRIMARY KEY,
+    Prefix VARCHAR(2) NOT NULL,
+    CurrentNumber INT DEFAULT 0
+);
+
 CREATE TABLE HangHoa (
     HangHoaID VARCHAR NOT NULL PRIMARY KEY,
     TenHangHoa VARCHAR,
@@ -44,55 +49,10 @@ CREATE TABLE HangHoa (
     Gia MONEY,
     SoLuongTonKho INT,
     KhoID VARCHAR,
-	CONSTRAINT fk_kho FOREIGN KEY (KhoID) REFERENCES Kho(KhoID) 
+    LoaiHangHoa VARCHAR,
+	CONSTRAINT fk_kho FOREIGN KEY (KhoID) REFERENCES Kho(KhoID),
+	CONSTRAINT fk_loaiHH FOREIGN KEY (LoaiHangHoa) REFERENCES LoaiHangHoaCounter(LoaiHangHoa)
 );
-
--- Tạo bảng con DienThoai
-CREATE TABLE DienThoai (
-    KichThuocManHinh DECIMAL(3, 1), 
-    BoNhoTrong INT,
-    RAM INT, 
-    DungLuongPin INT,
-    HeDieuHanh VARCHAR,
-    ThongSoCamera VARCHAR 
-) INHERITS (HangHoa);
-
--- Tạo bảng con Laptop
-CREATE TABLE Laptop (
-    KichThuocManHinh DECIMAL(3, 1),
-    CPU VARCHAR,
-    RAM INT,
-    DungLuongLuuTru VARCHAR,
-    CardDoHoa VARCHAR,
-    HeDieuHanh VARCHAR 
-) INHERITS (HangHoa);
-
--- Tạo bảng con DongHo
-CREATE TABLE DongHo (
-    KichThuocManHinh DECIMAL(3, 2),
-    DungLuongPin INT,
-    KhaNangChongNuoc VARCHAR,
-    HeDieuHanh VARCHAR, 
-    KetNoi VARCHAR, 
-    ChucNangTheoDoiSucKhoe VARCHAR  
-) INHERITS (HangHoa);
-
--- Tạo bảng con MayTinhBang
-CREATE TABLE MayTinhBang (
-    KichThuocManHinh DECIMAL(3, 2),
-    DungLuongLuuTru VARCHAR,
-    RAM INT,
-    DungLuongPin INT,
-    HeDieuHanh VARCHAR 
-) INHERITS (HangHoa);
-
--- Tạo bảng con TaiNghe
-CREATE TABLE TaiNghe (
-    ThoiGianPin INT,
-    CodayKhongDay VARCHAR,
-    TinhNangDacBiet VARCHAR,
-    KetNoi VARCHAR
-) INHERITS (HangHoa);
 
 CREATE TABLE CTGiamGia (
     MaCT VARCHAR NOT NULL PRIMARY KEY,
@@ -118,7 +78,6 @@ CREATE TABLE ChiTietHoaDon (
     HangHoaID VARCHAR NOT NULL,
     MaCT VARCHAR,
     SoLuong INT,
-    VoucherSinhNhat MONEY DEFAULT 0,
     ThanhTien MONEY,
     PRIMARY KEY (HoaDonID, HangHoaID),
     CONSTRAINT fk_mact FOREIGN KEY (MaCT) REFERENCES CTGiamGia(MaCT),
@@ -152,4 +111,3 @@ CREATE TABLE LuongThang (
 	PRIMARY KEY (KyLuong, NhanVienID),
     CONSTRAINT fk_nhanvien FOREIGN KEY (NhanVienID) REFERENCES NhanVien(NhanVienID)
 );
-
