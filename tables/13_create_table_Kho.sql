@@ -1,0 +1,8 @@
+CREATE TABLE Kho (
+    KhoID VARCHAR NOT NULL PRIMARY KEY,
+    TenKho VARCHAR,
+    DiaChi VARCHAR,
+    SoDienThoai VARCHAR,
+    QuanLykhoID VARCHAR,
+	CONSTRAINT fk_quanlykho FOREIGN KEY (QuanLykhoID) REFERENCES NhanVien(NhanVienID)
+);

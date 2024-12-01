@@ -1,0 +1,4 @@
+CREATE TABLE PhongBan (
+    PhongBanID VARCHAR NOT NULL PRIMARY KEY,
+    TenPB VARCHAR
+);
