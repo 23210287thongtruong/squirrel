@@ -23,3 +23,24 @@ CREATE TRIGGER trigger_check_phongban_pb2
 BEFORE INSERT OR UPDATE ON HoaDon
 FOR EACH ROW
 EXECUTE FUNCTION check_phongban_pb2();
+
+CREATE OR REPLACE FUNCTION check_ngay_tao_hoa_don() RETURNS TRIGGER AS $$
+DECLARE
+  ngay_vao_lam DATE;
+  ngay_ra_mat DATE;
+BEGIN
+  SELECT NgayVaoLam INTO ngay_vao_lam FROM NhanVien WHERE NhanVienID = NEW.NhanVienID;
+  SELECT NgayRaMat INTO ngay_ra_mat FROM HangHoa WHERE HangHoaID = NEW.HangHoaID;
+
+  IF NEW.NgayLapHD < ngay_vao_lam OR NEW.NgayLapHD < ngay_ra_mat THEN
+    RAISE EXCEPTION 'Ngày tạo hóa đơn phải lớn hơn ngày ra mắt sản phẩm và ngày vào làm của nhân viên tạo hóa đơn!';
+  END IF;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ngay_tao_hoa_don_trigger
+  BEFORE INSERT OR UPDATE ON HoaDon
+  FOR EACH ROW
+  EXECUTE FUNCTION check_ngay_tao_hoa_don();
