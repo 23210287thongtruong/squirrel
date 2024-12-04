@@ -8,12 +8,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Tạo Function cho Trigger NhanVienID tự động tăng theo dạng "NVxxx" bảng NhanVien
+-- Tạo Function cho Trigger NhanVienID tự động tăng theo dạng "NVxx" bảng NhanVien
 CREATE SEQUENCE nhan_vien_seq START 1;
 CREATE OR REPLACE FUNCTION create_nhan_vien_id()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.NhanVienID := 'KH' || LPAD(nextval('nhan_vien_seq')::TEXT, 3, '0');
+    NEW.NhanVienID := 'NV' || LPAD(nextval('nhan_vien_seq')::TEXT, 2, '0');
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
