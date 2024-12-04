@@ -6,7 +6,7 @@ EXECUTE FUNCTION create_khach_hang_id();
 
 -- Tạo Trigger NhanVienID tự động tăng theo dạng "NVxxx" bảng NhanVien
 CREATE TRIGGER auto_increase_nhan_vien_id
-BEFORE INSERT ON KhachHang
+BEFORE INSERT ON NhanVien
 FOR EACH ROW
 EXECUTE FUNCTION create_nhan_vien_id();
 
