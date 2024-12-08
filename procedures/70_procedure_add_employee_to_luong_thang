@@ -1,0 +1,50 @@
+CREATE OR REPLACE PROCEDURE insert_employees_into_luongthang(thang INT, nam INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_KyLuong VARCHAR(7);  -- Định dạng 'yyyy-mm'
+    v_NhanVienID VARCHAR;  -- ID của từng nhân viên
+BEGIN
+    -- Tạo giá trị KyLuong theo định dạng 'yyyy-mm'
+    v_KyLuong := to_char(to_date(nam || '-' || thang, 'YYYY-MM'), 'YYYY-MM');
+    -- Vòng lặp chèn dữ liệu cho tất cả nhân viên
+    FOR v_NhanVienID IN (SELECT NhanVienID FROM NhanVien)
+    LOOP
+        INSERT INTO LuongThang (
+            KyLuong,
+            NhanVienID,
+            ThuongThamNien,
+            PCSinhNhat,
+            PCChucVu,
+            NgayCong,
+            ThuNhapChiuThue,
+            ThuNhapTinhThue,
+            ThueTNCN,
+            BHXH,
+            HoaHong,
+            Phat,
+            LuongThucNhan
+        )
+        VALUES (
+            v_KyLuong,
+            v_NhanVienID,
+            0,      -- Giá trị mặc định cho các khoản thưởng
+            0,
+            0,
+            0,      -- Giá trị mặc định cho NgayCong
+            0,      -- Thu nhập chịu thuế (có thể cập nhật sau)
+            0,      -- Thu nhập tính thuế
+            0,      -- Thuế TNCN
+            0,      -- BHXH
+            0,      -- Hoa hồng
+            0,      -- Phạt
+            0       -- Lương thực nhận (có thể cập nhật sau)
+        );
+    END LOOP;
+    
+    RAISE NOTICE 'Dữ liệu lương tháng % năm % đã được chèn thành công.', thang, nam;
+END;
+$$;
+
+-- Test thử procedure
+-- CALL insert_employees_into_luongthang(12, 2024);
