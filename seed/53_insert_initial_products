@@ -5,7 +5,7 @@ VALUES
     ('Điện thoại', 'DT', 0),
     ('Laptop', 'LT', 0),
     ('Đồng hồ', 'DH', 0),
-    ('Máy tính bảng ', 'MT', 0),
+    ('Máy tính bảng', 'MT', 0),
     ('Tai nghe', 'TN', 0);
 
 --Thêm dữ liệu vào bảng Kho
