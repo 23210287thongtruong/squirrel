@@ -6,9 +6,9 @@ FROM (
     INNER JOIN HangHoa ON ChiTietHoaDon.HangHoaID = HangHoa.HangHoaID
     GROUP BY HoaDonID
 ) AS HoaDonTong
-WHERE TongTien > 20000000;
+WHERE TongTien >CAST( 20000000 as MONEY);
 -- 2. Tìm khách hàng đã thực hiện hóa đơn có giá trị cao nhất.
-SELECT KhachHang.HoTen, KhachHang.KhachHangID, MAX(TongTien) AS GiaTriCaoNhat
+SELECT KhachHang.HoTen, KhachHang.KhachHangID, MAX(HOADONTONG.TongTien) AS GiaTriCaoNhat
 FROM HoaDon
 INNER JOIN (
     SELECT HoaDonID, SUM(Gia * SoLuong) AS TongTien
@@ -17,7 +17,9 @@ INNER JOIN (
     GROUP BY HoaDonID
 ) AS HoaDonTong ON HoaDon.HoaDonID = HoaDonTong.HoaDonID
 JOIN KhachHang ON HoaDon.KhachHang = KhachHang.KhachHangID
-GROUP BY KhachHang.HoTen, KhachHang.KhachHangID;
+GROUP BY KhachHang.HoTen, KhachHang.KhachHangID
+ORDER BY GiaTriCaoNhat DESC 
+LIMIT 1;
 -- 3. Tìm nhân viên lập hóa đơn nhiều nhất.
 SELECT NhanVienID, COUNT(HoaDonID) AS SoHoaDon
 FROM HoaDon
@@ -49,7 +51,7 @@ FROM HoaDon
 JOIN ChiTietHoaDon ON HoaDon.HoaDonID = ChiTietHoaDon.HoaDonID
 JOIN HangHoa ON ChiTietHoaDon.HangHoaID = HangHoa.HangHoaID
 JOIN KhachHang ON HoaDon.KhachHang = KhachHang.KhachHangID
-WHERE EXTRACT(MONTH FROM HoaDon.NgayLap) = 2 AND EXTRACT(YEAR FROM HoaDon.NgayLap) = 2020;
+WHERE EXTRACT(MONTH FROM HoaDon.NgayLapHD) = 2 AND EXTRACT(YEAR FROM HoaDon.NgayLapHD) = 2020;
 -- 8. Xác định sản phẩm nào mang lại doanh thu cao nhất cho từng nhà sản xuất.
 SELECT HangHoa.NhaSanXuat, HangHoa.TenHangHoa, SUM(ChiTietHoaDon.SoLuong * HangHoa.Gia) AS DoanhThu
 FROM ChiTietHoaDon
@@ -66,11 +68,11 @@ GROUP BY KhachHang.HoTen
 ORDER BY SoLoaiSanPham DESC
 LIMIT 1;
 -- 10. Tìm tổng doanh thu theo từng tháng trong năm 2020.
-SELECT EXTRACT(MONTH FROM HoaDon.NgayLap) AS Thang, SUM(ChiTietHoaDon.SoLuong * HangHoa.Gia) AS TongDoanhThu
+SELECT EXTRACT(MONTH FROM HoaDon.NgayLapHD) AS Thang, SUM(ChiTietHoaDon.SoLuong * HangHoa.Gia) AS TongDoanhThu
 FROM HoaDon
 JOIN ChiTietHoaDon ON HoaDon.HoaDonID = ChiTietHoaDon.HoaDonID
 JOIN HangHoa ON ChiTietHoaDon.HangHoaID = HangHoa.HangHoaID
-WHERE EXTRACT(YEAR FROM HoaDon.NgayLap) = 2020
+WHERE EXTRACT(YEAR FROM HoaDon.NgayLapHD) = 2020
 GROUP BY Thang
 ORDER BY Thang;
 -- 11. Tìm tất cả hóa đơn có chứa sản phẩm "iPhone 11".
