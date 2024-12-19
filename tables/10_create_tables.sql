@@ -5,7 +5,7 @@ CREATE TABLE KhachHang (
     SoDienThoai VARCHAR,
     Email VARCHAR,
     SinhNhat DATE, 
-	DoanhSo MONEY DEFAULT 0,
+	DoanhSo NUMERIC(15, 2) DEFAULT 0,
 	LoaiKH VARCHAR
 );
 CREATE TABLE PhongBan (
@@ -46,7 +46,7 @@ CREATE TABLE HangHoa (
 	NgayRaMat DATE,
     NhaSanXuat VARCHAR,
     MucThueGTGT INT,
-    Gia MONEY,
+    Gia NUMERIC(15, 2),
     SoLuongTonKho INT,
     KhoID VARCHAR,
     LoaiHangHoa VARCHAR,
@@ -68,7 +68,7 @@ CREATE TABLE HoaDon (
     NgayLapHD DATE,
     KhachHangID VARCHAR DEFAULT NULL,
     NhanVienID VARCHAR,
-    TongTien MONEY DEFAULT 0,
+    TongTien NUMERIC(15, 2) DEFAULT 0,
     CONSTRAINT fk_khachhang FOREIGN KEY (KhachHangID) REFERENCES KhachHang(KhachHangID),
     CONSTRAINT fk_nhanvien FOREIGN KEY (NhanVienID) REFERENCES NhanVien(NhanVienID)
 );
@@ -78,7 +78,7 @@ CREATE TABLE ChiTietHoaDon (
     HangHoaID VARCHAR NOT NULL,
     MaCT VARCHAR,
     SoLuong INT,
-    ThanhTien MONEY,
+    ThanhTien NUMERIC(15, 2),
     PRIMARY KEY (HoaDonID, HangHoaID),
     CONSTRAINT fk_mact FOREIGN KEY (MaCT) REFERENCES CTGiamGia(MaCT),
     CONSTRAINT fk_hoadon FOREIGN KEY (HoaDonID) REFERENCES HoaDon(HoaDonID),
@@ -89,7 +89,7 @@ CREATE TABLE ThongTinLuong (
     NgayHieuLuc DATE NOT NULL,
     NhanVienID VARCHAR NOT NULL,
     TruongNhom BOOLEAN,
-    LuongCung MONEY DEFAULT 0,
+    LuongCung NUMERIC(15, 2) DEFAULT 0,
     SoNguoiPhuThuoc INT DEFAULT 0,
     PRIMARY KEY (NgayHieuLuc, NhanVienID),
     CONSTRAINT fk_nhanvien FOREIGN KEY (NhanVienID) REFERENCES NhanVien(NhanVienID)
@@ -97,17 +97,17 @@ CREATE TABLE ThongTinLuong (
 CREATE TABLE LuongThang (
     KyLuong VARCHAR NOT NULL,
     NhanVienID VARCHAR NOT NULL,
-    ThuongThamNien MONEY DEFAULT 0,
-    PCSinhNhat MONEY DEFAULT 0,
-    PCChucVu MONEY DEFAULT 0,
+    ThuongThamNien NUMERIC(15, 2) DEFAULT 0,
+    PCSinhNhat NUMERIC(15, 2) DEFAULT 0,
+    PCChucVu NUMERIC(15, 2) DEFAULT 0,
     NgayCong INT,
-    ThuNhapChiuThue MONEY,
-    ThuNhapTinhThue MONEY,
-    ThueTNCN MONEY,
-    BHXH MONEY,
-    HoaHong MONEY DEFAULT 0,
-    Phat MONEY DEFAULT 0,
-    LuongThucNhan MONEY,
+    ThuNhapChiuThue NUMERIC(15, 2),
+    ThuNhapTinhThue NUMERIC(15, 2),
+    ThueTNCN NUMERIC(15, 2),
+    BHXH NUMERIC(15, 2),
+    HoaHong NUMERIC(15, 2) DEFAULT 0,
+    Phat NUMERIC(15, 2) DEFAULT 0,
+    LuongThucNhan NUMERIC(15, 2),
 	PRIMARY KEY (KyLuong, NhanVienID),
     CONSTRAINT fk_nhanvien FOREIGN KEY (NhanVienID) REFERENCES NhanVien(NhanVienID)
 );
