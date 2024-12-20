@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 -- Hàm tính HoaHong:
 
@@ -27,6 +28,8 @@ BEGIN
     RETURN v_HoaHong;
 END;
 =======
+=======
+>>>>>>> Stashed changes
 
 
 CREATE OR REPLACE FUNCTION CalculateHoaHong(v_NhanVienID VARCHAR, v_KyLuong VARCHAR)
@@ -62,5 +65,9 @@ BEGIN
     -- Return the calculated commission
     RETURN v_HoaHong;
 END;
+<<<<<<< Updated upstream
+$$;
+>>>>>>> Stashed changes
+=======
 $$;
 >>>>>>> Stashed changes
