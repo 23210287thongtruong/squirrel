@@ -5,7 +5,7 @@ ADD CONSTRAINT ck_soluongtonkho CHECK (SoLuongTonKho >= 0);
 -- Kiểm tra NgayLap không lớn hơn ngày hiện tại và TongTien > 0
 ALTER TABLE HoaDon
 ADD CONSTRAINT ck_ngaylaphd CHECK (NgayLapHD <= CURRENT_DATE),
-ADD CONSTRAINT ck_tongtien CHECK (TongTien > 0::money);
+ADD CONSTRAINT ck_tongtien CHECK (TongTien > 0);
 
 -- Function kiểm tra phòng ban của nhân viên là 'PB2'
 CREATE OR REPLACE FUNCTION check_phongban_pb2()

@@ -17,5 +17,3 @@ CREATE TRIGGER trg_update_tongtien
                         FOR EACH ROW
                         EXECUTE FUNCTION update_tongtien();
 
-ALTER TABLE HoaDon
-    ADD CONSTRAINT chk_tongtien_positive CHECK (TongTien >= 0);
