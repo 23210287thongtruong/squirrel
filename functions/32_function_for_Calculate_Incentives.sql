@@ -1,5 +1,6 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 -- Hàm tính HoaHong:
 
@@ -28,6 +29,8 @@ BEGIN
     RETURN v_HoaHong;
 END;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
@@ -66,6 +69,10 @@ BEGIN
     RETURN v_HoaHong;
 END;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+$$;
+>>>>>>> Stashed changes
+=======
 $$;
 >>>>>>> Stashed changes
 =======
