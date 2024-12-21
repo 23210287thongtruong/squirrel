@@ -19,7 +19,7 @@ ORDER BY NgayLapHD ASC, TongTien DESC;
 -- In ra danh sách khách hàng (KhachHangID, HoTen) có tổng giá trị hóa đơn trên 20 triệu VND trong năm 2024
 SELECT KH.KhachHangID, KH.HoTen, SUM(HD.TongTien) AS TongChiTieu
 FROM KhachHang KH
-JOIN HoaDon HD ON KH.KhachHangID = HD.KhachHang
+JOIN HoaDon HD ON KH.KhachHangID = HD.KhachHangID
 WHERE EXTRACT(YEAR FROM HD.NgayLapHD) = 2024
 GROUP BY KH.KhachHangID, KH.HoTen
 HAVING SUM(HD.TongTien) > 20000000;
@@ -55,8 +55,8 @@ WHERE SHD.TongSoHoaDon = (SELECT MAX(TongSoHoaDon) FROM SoHoaDon);
 -- Tìm sản phẩm (HangHoaID, TenHangHoa) có tổng số lượng bán ra thấp nhất trong năm 2024
 WITH SoLuongBan AS (
     SELECT HangHoaID, SUM(SoLuong) AS TongSoLuong
-    FROM ChiTietHoaDon cthd
-    JOIN HoaDon HD ON cthd.HoaDonID = HD.HoaDonID
+    FROM ChiTietHoaDon CTHD
+    JOIN HoaDon HD ON CTHD.HoaDonID = HD.HoaDonID
     WHERE EXTRACT(YEAR FROM HD.NgayLapHD) = 2024
     GROUP BY HangHoaID
 )
