@@ -1,5 +1,6 @@
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
 -- Hàm Tính Thuế TNCN
 
@@ -32,6 +33,8 @@ $$ LANGUAGE plpgsql;
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
 -- Hàm Tính Thuế TNCN
 
@@ -62,6 +65,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
