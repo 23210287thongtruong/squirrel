@@ -111,3 +111,6 @@ CREATE TABLE LuongThang (
 	PRIMARY KEY (KyLuong, NhanVienID),
     CONSTRAINT fk_nhanvien FOREIGN KEY (NhanVienID) REFERENCES NhanVien(NhanVienID)
 );
+create table kyluongNV (
+kyluong varchar
+);
