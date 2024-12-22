@@ -1,34 +1,54 @@
-create function calculate_thanhtien() returns trigger
-    language plpgsql
-as
-$$
+CREATE OR REPLACE FUNCTION calculate_thanhtien() RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS $$
 DECLARE
-gia MONEY;
-    muc_thue FLOAT;
-    giam_gia FLOAT;
-    voucher INT DEFAULT 0;
+    v_gia NUMERIC; -- Renamed to avoid conflict
+    v_muc_thue FLOAT;
+    v_giam_gia FLOAT DEFAULT 0;
+    v_voucher NUMERIC DEFAULT 0;
+    v_khach_hang_id VARCHAR;
 BEGIN
-    -- Lấy giá và thuế từ bảng HangHoa
-SELECT Gia, MucThueGTGT INTO gia, muc_thue
-FROM HangHoa
-WHERE HangHoaID = NEW.HangHoaID;
+    -- Fetch product price and tax
+    SELECT hh.Gia, hh.MucThueGTGT INTO v_gia, v_muc_thue
+    FROM HangHoa hh
+    WHERE hh.HangHoaID = NEW.HangHoaID;
 
--- Lấy giảm giá từ bảng CTGiamGia
-SELECT COALESCE(GiamGia, 0) INTO giam_gia
-FROM CTGiamGia
-WHERE HangHoaID = NEW.HangHoaID;
+    -- Debug
+    RAISE NOTICE 'Gia: %, MucThue: %', v_gia, v_muc_thue;
 
--- Kiểm tra VoucherSinhNhat
-SELECT CASE
-           WHEN EXTRACT(MONTH FROM SinhNhat) = EXTRACT(MONTH FROM CURRENT_DATE) THEN 200000
-           ELSE 0
-           END INTO voucher
-FROM KhachHang
-WHERE KhachHangID = NEW.KhachHangID;
+    -- Fetch discount (if applicable)
+    SELECT COALESCE(ct.GiamGia, 0) INTO v_giam_gia
+    FROM CTGiamGia ct
+    WHERE ct.HangHoaID = NEW.HangHoaID
+      AND CURRENT_DATE BETWEEN ct.NgayBatDau AND ct.NgayKetThuc;
 
--- Tính ThanhTien
-NEW.ThanhTien := (gia * (1 - giam_gia / 100)) * (1 + muc_thue / 100) - voucher;
+    -- Debug
+    RAISE NOTICE 'GiamGia: %', v_giam_gia;
 
-RETURN NEW;
+    -- Fetch associated KhachHangID from HoaDon
+    SELECT hd.KhachHangID INTO v_khach_hang_id
+    FROM HoaDon hd
+    WHERE hd.HoaDonID = NEW.HoaDonID;
+
+    -- Check for birthday voucher
+    IF v_khach_hang_id IS NOT NULL THEN
+        SELECT CASE
+                   WHEN EXTRACT(MONTH FROM kh.SinhNhat) = EXTRACT(MONTH FROM CURRENT_DATE) THEN 200000
+                   ELSE 0
+                   END INTO v_voucher
+        FROM KhachHang kh
+        WHERE kh.KhachHangID = v_khach_hang_id;
+    END IF;
+
+    -- Debug
+    RAISE NOTICE 'Voucher: %', v_voucher;
+
+    -- Calculate ThanhTien
+    NEW.ThanhTien := (v_gia * NEW.SoLuong * (1 - v_giam_gia / 100)) * (1 + v_muc_thue / 100) - v_voucher;
+
+    -- Debug calculated ThanhTien
+    RAISE NOTICE 'ThanhTien: %', NEW.ThanhTien;
+
+    RETURN NEW;
 END;
 $$;
