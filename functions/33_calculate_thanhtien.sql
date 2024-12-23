@@ -17,7 +17,7 @@ BEGIN
     RAISE NOTICE 'Gia: %, MucThue: %', v_gia, v_muc_thue;
 
     -- Fetch discount (if applicable)
-    SELECT COALESCE(ct.GiamGia, 0) INTO v_giam_gia
+    SELECT COALESCE(avg(ct.GiamGia), 0) INTO v_giam_gia
     FROM CTGiamGia ct
     WHERE ct.HangHoaID = NEW.HangHoaID
       AND CURRENT_DATE BETWEEN ct.NgayBatDau AND ct.NgayKetThuc;
