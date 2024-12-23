@@ -91,3 +91,53 @@ WITH ChiTieuKhachHang AS (
 SELECT KhachHangID, HoTen, TongChiTieu, XepHang
 FROM ChiTieuKhachHang
 WHERE XepHang <= 3;
+
+-- Hiệu quả của nhân viên bán hàng
+WITH ThongSoBanHang AS (
+    SELECT 
+        NV.NhanVienID,
+        NV.HoTen,
+        COUNT(DISTINCT HD.HoaDonID) AS SoDonHang,
+        SUM(HD.TongTien) AS DoanhSo,
+        AVG(HD.TongTien) AS AvgDonHang,
+        COUNT(DISTINCT HD.KhachHangID) AS SoKHMoi
+    FROM NhanVien NV
+    LEFT JOIN HoaDon HD ON NV.NhanVienID = HD.NhanVienID
+    WHERE NV.PhongBan = 'PB2'
+    GROUP BY NV.NhanVienID, NV.HoTen
+)
+SELECT 
+    *,
+    RANK() OVER (ORDER BY DoanhSo DESC) AS RankDanhSo,
+    RANK() OVER (ORDER BY SoKHMoi DESC) AS RankSoKHMoi
+FROM ThongSoBanHang
+ORDER BY DoanhSo DESC;
+
+-- Hiệu quả của kho
+SELECT 
+    Kho.KhoID,
+    Kho.TenKho,
+    COUNT(DISTINCT HH.HangHoaID) AS SoMatHang,
+    SUM(HH.SoLuongTonKho) AS TongTonKho,
+    SUM(HH.SoLuongTonKho * HH.Gia) AS GiaTriTonKho,
+    COUNT(DISTINCT CTHD.HoaDonID) AS SoDonHang,
+    SUM(CTHD.ThanhTien) AS DoanhThu
+FROM Kho
+LEFT JOIN HangHoa HH ON Kho.KhoID = HH.KhoID
+LEFT JOIN ChiTietHoaDon CTHD ON HH.HangHoaID = CTHD.HangHoaID
+GROUP BY Kho.KhoID, Kho.TenKho
+ORDER BY DoanhThu DESC;
+
+-- Top sản phẩm bán chạy và đóng góp doanh thu
+SELECT 
+    HH.HangHoaID,
+    HH.TenHangHoa,
+    HH.LoaiHangHoa,
+    SUM(CTHD.SoLuong) AS TongSoLuongBan,
+    SUM(CTHD.ThanhTien) AS TongDoanhThu,
+    ROUND(SUM(CTHD.ThanhTien) * 100.0 / (SELECT SUM(TongTien) FROM HoaDon), 2) AS PhanTramDoanhThu
+FROM HangHoa HH
+JOIN ChiTietHoaDon CTHD ON HH.HangHoaID = CTHD.HangHoaID
+GROUP BY HH.HangHoaID, HH.TenHangHoa, HH.LoaiHangHoa
+ORDER BY TongDoanhThu DESC
+LIMIT 10;
