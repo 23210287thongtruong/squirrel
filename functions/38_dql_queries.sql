@@ -217,7 +217,7 @@ SELECT KhachHangID, HoTen, Email, SoNgayTuLanMuaCuoi, SoLanMua, TongChiTieu, CON
         WHEN R >= 4 AND F >= 4 AND M >= 4 THEN 'Khách hàng chiến lược'
         WHEN R >= 3 AND F >= 3 AND M >= 3 THEN 'Khách hàng trung thành'
         WHEN R >= 2 AND F >= 2 AND M >= 2 THEN 'Khách hàng tiềm năng'
-		WHEN R >= 2 OR F >= 2 OR M >= 2 THEN 'Khách hàng nguy hiểm'
+	WHEN R >= 2 OR F >= 2 OR M >= 2 THEN 'Khách hàng nguy hiểm'
         ELSE 'Khách hàng ít hoạt động'
     END AS XepLoai
 FROM KH_RFM
