@@ -126,3 +126,5 @@ create table kyluongNV (
 	kyluong varchar primary key,
 	tongluong numeric(15,2)
 );
+ALTER TABLE LuongThang
+ADD CONSTRAINT fk_kyluong FOREIGN KEY (KyLuong) REFERENCES kyluongNV(KyLuong);
